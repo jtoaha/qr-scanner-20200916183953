@@ -1,0 +1,7 @@
+{
+  "name": "QR Scanner",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
