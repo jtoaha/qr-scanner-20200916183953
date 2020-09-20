@@ -3,11 +3,13 @@ import { IonButton, IonCard, IonCardHeader, IonCardTitle, IonCardContent } from 
 import './QRScanner.css';
 import jsQR from 'jsqr';
 
+
 type PropsType = VideoHTMLAttributes<HTMLVideoElement> & {
   srcObject: MediaStream
   refVideo: Object
 
 }
+
 
 interface ContainerProps {
   name: string;
@@ -50,14 +52,10 @@ private canvasContext: any;
   componentDidMount(){
      this.canvasElement = this.canvas.current!
      this.videoElement = this.video.current!
-     console.log(this.videoElement, "VIDEOOO")
      this.canvasContext = this.canvasElement.getContext('2d')
 
 
-     //navigator.getUserMedia = navigator.getUserMedia /*|| navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia*/;
-    //  if (navigator.getUserMedia) {
-    //      navigator.getUserMedia({video: true}, this.handleVideo, this.videoError);
-    //  }
+
     }
 
   componentDidUpdate(){
@@ -98,7 +96,7 @@ private canvasContext: any;
     });
 
 
-    console.log(stream, "YOO")
+    console.log(stream, "STREAAM")
 
 
     //wait this.handleVideo(stream)
@@ -112,7 +110,7 @@ private canvasContext: any;
 
 
     this.videoElement.play();
-    requestAnimationFrame(this.scan.bind(this));
+    requestAnimationFrame(this.scan);
   }
 
   async scan() {
@@ -123,6 +121,8 @@ private canvasContext: any;
       //   this.loading = null;
         this.setState({scanActive: true});
       // }
+
+
 
       this.canvasElement.height = this.videoElement.videoHeight;
       this.canvasElement.width = this.videoElement.videoWidth;
