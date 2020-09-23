@@ -75,18 +75,12 @@ private stream: any;
 
     this.setState({scanActive: true});
 
-    console.log(stream, "STREAAM")
-
-
-    //wait this.handleVideo(stream)
-
     this.videoElement.srcObject = stream;
     // Required for Safari
     this.videoElement.setAttribute('playsinline', true);
 
     // this.loading = await this.loadingCtrl.create({});
     // await this.loading.present();
-
 
     this.videoElement.play();
     requestAnimationFrame(this.scan);
@@ -100,8 +94,6 @@ private stream: any;
       //   this.loading = null;
 
       // }
-
-
 
       this.canvasElement.height = this.videoElement.videoHeight;
       this.canvasElement.width = this.videoElement.videoWidth;
