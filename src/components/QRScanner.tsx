@@ -1,14 +1,7 @@
-import React, {createRef, VideoHTMLAttributes} from 'react';
+import React, {createRef} from 'react';
 import { IonButton, IonCard, IonCardHeader, IonCardTitle, IonCardContent } from '@ionic/react';
 import './QRScanner.css';
 import jsQR from 'jsqr';
-
-
-type PropsType = VideoHTMLAttributes<HTMLVideoElement> & {
-  srcObject: MediaStream
-  refVideo: Object
-
-}
 
 
 interface ContainerProps {
@@ -30,6 +23,7 @@ private fileInput = createRef<HTMLInputElement>();
 private canvasElement: any;
 private videoElement: any;
 private canvasContext: any;
+private stream: any;
 // private loading!: HTMLIonLoadingElement;
 
   constructor(props: ContainerProps){
@@ -40,7 +34,6 @@ private canvasContext: any;
       videoSrc: ''
     }
 
-    //this.handleVideo = this.handleVideo.bind(this);
     this.videoError = this.videoError.bind(this);
     this.startScan = this.startScan.bind(this);
     this.scan = this.scan.bind(this);
@@ -50,32 +43,17 @@ private canvasContext: any;
   }
 
   componentDidMount(){
-     this.canvasElement = this.canvas.current!
-     this.videoElement = this.video.current!
-     this.canvasContext = this.canvasElement.getContext('2d')
-
-
-
+    //  this.canvasElement = this.canvas.current!
+    //  this.videoElement = this.video.current!
+    //  this.canvasContext = this.canvasElement.getContext('2d')
     }
 
-  componentDidUpdate(){
+  async componentDidUpdate(){
     this.canvasElement = this.canvas.current!
     this.videoElement = this.video.current!
     this.canvasContext = this.canvasElement.getContext('2d')
   }
 
-  // handleVideo (stream: MediaStream):void {
-  //   // Update the state, triggering the component to re-render with the correct stream
-
-  //   try {
-  //     const srcObject = stream;
-  //   } catch (error) {
-  //     const  src = window.URL.createObjectURL(stream);
-  //     this.setState({ videoSrc: src});
-  //   }
-
-
-  // }
 
   videoError (){
 
@@ -95,6 +73,7 @@ private canvasContext: any;
       video: { facingMode: 'environment' }
     });
 
+    this.setState({scanActive: true});
 
     console.log(stream, "STREAAM")
 
@@ -119,7 +98,7 @@ private canvasContext: any;
       // if (this.loading) {
       //   await this.loading.dismiss();
       //   this.loading = null;
-        this.setState({scanActive: true});
+
       // }
 
 
@@ -164,7 +143,7 @@ private canvasContext: any;
   }
 
   refresh(){
-    this.setState({scanResult: ''});
+    this.setState({scanResult: '', scanActive: false});
   }
 
   handleFile(event: React.ChangeEvent<HTMLElement>): void{
@@ -198,7 +177,7 @@ private canvasContext: any;
       <canvas hidden ref={this.canvas}></canvas>
 
       {/* --Stop our scanner preview if active-- */}
-      {this.state.scanActive ? <IonButton shape="round" onClick={this.stopScan} color="danger">Reset</IonButton>: null}
+      {this.state.scanActive ? <IonButton shape="round" onClick={this.stopScan} color="danger">Stop Scan</IonButton>: null}
 
       {/* --Display scanner result-- */}
       <IonCard>
