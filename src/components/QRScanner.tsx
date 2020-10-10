@@ -67,15 +67,18 @@ private stream: any;
 
   }
 
+  /*
+   startScan sets up the stream and then sets up a continuous call to scan via requestAnimationFrame
+  */
   async startScan(){
   // Not working on iOS standalone mode!
-    const stream = await navigator.mediaDevices.getUserMedia({
+    this.stream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: 'environment' }
     });
 
     this.setState({scanActive: true});
 
-    this.videoElement.srcObject = stream;
+    this.videoElement.srcObject = this.stream;
     // Required for Safari
     this.videoElement.setAttribute('playsinline', true);
 
@@ -124,13 +127,19 @@ private stream: any;
         if (this.state.scanActive) {
           requestAnimationFrame(this.scan);
         }
+        // else {
+        //   this.videoElement.srcObject = null;
+        // }
       }
     } else {
       requestAnimationFrame(this.scan);
     }
   }
 
+  /* stops stream */
   stopScan(){
+    this.stream.getTracks()[0].stop();
+    this.videoElement.setAttribute('playsinline', false);
     this.setState({scanActive: false});
   }
 
