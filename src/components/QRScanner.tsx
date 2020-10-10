@@ -3,7 +3,6 @@ import { IonButton, IonCard, IonCardHeader, IonCardTitle, IonCardContent } from 
 import './QRScanner.css';
 import jsQR from 'jsqr';
 
-
 interface ContainerProps {
   name: string;
 }
@@ -28,13 +27,13 @@ class QRScanner extends React.Component<ContainerProps, ContainerState> {
 
   constructor(props: ContainerProps) {
     super(props);
+
     this.state = {
       scanActive: false,
       scanResult: '',
       videoSrc: ''
     }
 
-    this.videoError = this.videoError.bind(this);
     this.startScan = this.startScan.bind(this);
     this.scan = this.scan.bind(this);
     this.stopScan = this.stopScan.bind(this)
@@ -44,11 +43,12 @@ class QRScanner extends React.Component<ContainerProps, ContainerState> {
   }
 
   componentDidMount() {
-    //  this.canvasElement = this.canvas.current!
-    //  this.videoElement = this.video.current!
-    //  this.canvasContext = this.canvasElement.getContext('2d')
+    this.canvasElement = this.canvas.current!
+    this.videoElement = this.video.current!
+    this.canvasContext = this.canvasElement.getContext('2d')
   }
 
+  // When DOM is loaded, componentDidUpdate grabs references to relevant elements.
   async componentDidUpdate() {
     this.canvasElement = this.canvas.current!
     this.videoElement = this.video.current!
@@ -57,20 +57,9 @@ class QRScanner extends React.Component<ContainerProps, ContainerState> {
   }
 
 
-  videoError() {
-
-  }
-
-  updateVideoStream() {
-
-  }
-
-
-  /*
-   startScan sets up the stream and then sets up a continuous call to scan via requestAnimationFrame
-  */
+  // startScan sets up the stream and then sets up a continuous call
   async startScan() {
-    // Not working on iOS standalone mode!
+    // As of now doesn't work on, iOS standalone mode!
     this.stream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: 'environment' }
     });
@@ -124,22 +113,17 @@ class QRScanner extends React.Component<ContainerProps, ContainerState> {
         });
         //this.showQrToast();
       } else {
-        if (this.state.scanActive) {
+        if (this.state.scanActive)
           requestAnimationFrame(this.scan);
-        }
-        // else {
-        //   this.videoElement.srcObject = null;
-        // }
       }
     } else {
       requestAnimationFrame(this.scan);
     }
   }
 
-  /**
-   * stops scan when user presses corresponding button.
-   * - stops stream and sets the state of scanActive to false
-   */
+
+  //stops scan when user presses corresponding button.
+  //stops stream and sets the state of scanActive to false
   stopScan() {
     this.videoElement.setAttribute('playsinline', false);
     this.stream.getTracks()[0].stop();
@@ -180,7 +164,6 @@ class QRScanner extends React.Component<ContainerProps, ContainerState> {
     this.fileInput.click();
   }
 
-
   render() {
     console.log(this.videoElement, "jooo")
     return (
@@ -190,8 +173,7 @@ class QRScanner extends React.Component<ContainerProps, ContainerState> {
         <p> Hello World!</p>
 
         {/* -- Fallback for iOS PWA -- */}
-        <input id="file-input" type="file" accept="image/*;capture=camera" hidden onChange={this.handleFile} ref={this.fileInput} />
-
+        <input id="file-input" type="file" accept="image/*;capture=camera" hidden onChange={this.handleFile} />
 
         {/* --Trigger the file input-- */}
         <IonButton id="camera" shape="round" onClick={this.uploadImage} color="primary">Upload Image</IonButton>  - or -
@@ -200,9 +182,7 @@ class QRScanner extends React.Component<ContainerProps, ContainerState> {
 
         {/* --Shows our camera stream-- */}
         {/* <video width="50%" ref={this.video} autoPlay={true}/> */}
-
         <video hidden={!this.state.scanActive} width="100%" ref={this.video} autoPlay={true} />
-        {/* <Video videoRef={this.video} srcObject={new MediaStream()}/> */}
 
         {/* --Used to render the camera stream images-- */}
         <canvas hidden ref={this.canvas}></canvas>
